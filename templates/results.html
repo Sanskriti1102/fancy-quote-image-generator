@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<p>🔹 Found {{ quotes|length }} matching quote(s):</p>
+<ol>
+    {% for quote in quotes %}
+    <li>{{ quote }}</li>
+    {% endfor %}
+</ol>
+
+<form action="/select" method="post">
+    <input type="hidden" name="name" value="{{ name }}">
+    <input type="hidden" name="keywords" value="{{ keywords }}">
+
+    <label for="choice">Pick a quote number:</label>
+    <input type="number" id="choice" name="choice" min="1" max="{{ quotes|length }}" value="1"
+        placeholder="Enter quote number" title="Choose the quote number you want to style" required>
+
+    <button type="submit">Style and Export</button>
+</form>
+{% endblock %}

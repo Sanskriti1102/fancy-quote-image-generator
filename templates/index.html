@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block content %}
+<form action="/scrape" method="post">
+    <input type="text" name="name" placeholder="Enter your name" required>
+    <button type="submit">🔍 Scrape Quotes</button>
+</form>
+{% endblock %}
+
+<!-- templates/keywords.html -->
+{% extends "layout.html" %}
+{% block content %}
+<img src="/static/wordcloud.png" alt="Word Cloud">
+<p>💡 Keywords from the word cloud:</p>
+<p>{{ keywords|join(', ') }}</p>
+<form action="/search" method="post">
+    <input type="hidden" name="name" value="{{ name }}">
+    <input type="text" name="keywords" placeholder="Enter comma-separated keywords">
+    <button type="submit">Search Quotes</button>
+</form>
+{% endblock %}

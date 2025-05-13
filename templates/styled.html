@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>💬 Your LinkedIn-style post:</h2>
+<textarea id="styledText" rows="10" readonly>{{ styled }}</textarea>
+
+<div class="buttons">
+    <button onclick="copyText()">📋 Copy</button>
+    <a href="/download?name={{ name }}" class="button">📄 Download as DOCX</a>
+</div>
+
+<script>
+    function copyText() {
+        const textArea = document.getElementById("styledText");
+        textArea.select();
+        document.execCommand("copy");
+        alert("Copied to clipboard!");
+    }
+</script>
+{% endblock %}
