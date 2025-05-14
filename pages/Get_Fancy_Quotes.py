@@ -103,9 +103,9 @@ def generate_quote_image(quote, author, font_name, font_size, color, bg_mode):
 # -------------------------------
 # Streamlit UI
 # -------------------------------
-st.set_page_config(page_title="🖼️ Quote Image Generator", layout="centered")
-st.title("🖼️ Quote Image Generator")
-st.markdown("Create stylish quote images with custom fonts, colors, and themes!")
+st.set_page_config(page_title="🖼️ Get Fancy Quote Images", layout="centered")
+st.title("🖼️ Get Fancy Quote Images")
+st.markdown("Create stylish quote images with custom fonts, colors, and themes and MORE")
 
 # Scraping and Word Cloud
 st.subheader("🔍 Explore Quotes by Keyword")

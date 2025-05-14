@@ -4,7 +4,7 @@ import os
 import io
 
 # ✅ Must be the first Streamlit command
-st.set_page_config(page_title="🖼️ Quote Image Generator", layout="centered")
+st.set_page_config(page_title="🖼️ Style Your Quote Image", layout="centered")
 
 # Inject custom fonts into the HTML
 st.markdown("""
@@ -46,7 +46,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("🖼️ Quote Image Generator")
+st.title("🖼️ Style Your Quote Image")
 st.markdown("Create stylish quote images with custom fonts, colors, and themes!")
 
 quote = st.text_area("💬 Enter your quote:", "The best way to get started is to quit talking and begin doing.")
