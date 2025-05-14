@@ -138,6 +138,16 @@ font_choice = st.selectbox("🔤 Choose a Font:", [
     "Open Sans", "Raleway", "Roboto", "Lobster", "Merriweather", "Playfair Display"
 ])
 
+# ✅ Font Preview
+font_preview_path = load_local_font(font_choice)
+if font_preview_path:
+    preview_img = Image.new("RGB", (600, 100), color=(255, 255, 255))
+    draw = ImageDraw.Draw(preview_img)
+    preview_font = ImageFont.truetype(font_preview_path, 40)
+    preview_text = f"This is a preview of {font_choice}"
+    draw.text((20, 30), preview_text, font=preview_font, fill=(0, 0, 0))
+    st.image(preview_img, caption=f"Font Preview: {font_choice}", use_container_width=False)
+
 font_size = st.slider("🆙 Font Size:", 20, 80, 40)
 font_color = st.color_picker("🎨 Font Color:", "#000000")
 bg_mode = st.selectbox("🌙 Background Mode:", ["Light", "Dark"])
