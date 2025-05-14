@@ -34,13 +34,11 @@ st.markdown("""
         src: url('fonts/PlayfairDisplay-Regular.ttf');
     }
 
-    /* Apply font to dropdown */
     div[data-baseweb="select"] > div {
         font-family: 'Raleway', sans-serif;
         font-size: 18px;
     }
 
-    /* Font previews */
     .font-preview {
         font-size: 20px;
         margin-bottom: 6px;
@@ -54,7 +52,7 @@ st.markdown("Create stylish quote images with custom fonts, colors, and themes!"
 quote = st.text_area("💬 Enter your quote:", "The best way to get started is to quit talking and begin doing.")
 author = st.text_input("🖊️ Author name:", "Walt Disney")
 
-# Font selection with preview
+# Font options
 font_options = {
     "Open Sans": "font-family: 'Open Sans'",
     "Raleway": "font-family: 'Raleway'",
@@ -69,17 +67,13 @@ st.markdown("### 🔤 Font Previews")
 for font_name, css in font_options.items():
     st.markdown(f'<p class="font-preview" style="{css}">{font_name}</p>', unsafe_allow_html=True)
 
-# Font selection
 font_choice = st.selectbox("Choose a Font:", list(font_options.keys()))
-
 font_size = st.slider("🆙 Font Size:", 20, 80, 40)
 font_color = st.color_picker("🎨 Font Color:", "#000000")
 bg_mode = st.selectbox("🌙 Background Mode:", ["Light", "Dark"])
 
 
-# -------------------------------
-# Load Local Font
-# -------------------------------
+# Load font path
 def load_local_font(font_name):
     font_map = {
         "Open Sans": "OpenSans-Regular.ttf",
@@ -91,16 +85,14 @@ def load_local_font(font_name):
     }
     font_file = font_map.get(font_name)
     font_path = os.path.join("fonts", font_file) if font_file else None
-
     if font_path and os.path.exists(font_path):
         return font_path
     else:
-        st.warning(f"⚠️ Font '{font_name}' not found in local fonts folder.")
+        st.warning(f"⚠️ Font '{font_name}' not found.")
         return None
 
-# -------------------------------
-# Generate Quote Image
-# -------------------------------
+
+# Generate the image
 def generate_quote_image(quote, author, font_name, font_size, color, bg_mode):
     width, height = 1080, 1080
     bg_color = (255, 255, 255) if bg_mode == "Light" else (0, 0, 0)
@@ -151,6 +143,7 @@ def generate_quote_image(quote, author, font_name, font_size, color, bg_mode):
     return img
 
 
+# Button to generate image
 if st.button("🚀 Generate Quote Image"):
     with st.spinner("Creating your masterpiece..."):
         img = generate_quote_image(quote, author, font_choice, font_size, font_color, bg_mode)
