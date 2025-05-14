@@ -3,10 +3,10 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 import io
 
-# ✅ Must be the first Streamlit command
+# ✅ Configure Streamlit page
 st.set_page_config(page_title="🖼️ Style Your Quote Image", layout="centered")
 
-# Inject custom fonts into the HTML
+# ✅ Load Custom Fonts for use in image (no preview shown)
 st.markdown("""
     <style>
     @font-face {
@@ -33,57 +33,43 @@ st.markdown("""
         font-family: 'Playfair Display';
         src: url('fonts/PlayfairDisplay-Regular.ttf');
     }
-
-    div[data-baseweb="select"] > div {
-        font-family: 'Raleway', sans-serif;
-        font-size: 18px;
-    }
-
-    .font-preview {
-        font-size: 20px;
-        margin-bottom: 6px;
-    }
     </style>
 """, unsafe_allow_html=True)
 
 st.title("🖼️ Style Your Quote Image")
 st.markdown("Create stylish quote images with custom fonts, colors, and themes!")
 
+# ---------------------------
+# Quote Input
+# ---------------------------
 quote = st.text_area("💬 Enter your quote:", "The best way to get started is to quit talking and begin doing.")
 author = st.text_input("🖊️ Author name:", "Walt Disney")
 
-# Font options
+# ---------------------------
+# Font Options (Dropdown Only)
+# ---------------------------
 font_options = {
-    "Open Sans": "font-family: 'Open Sans'",
-    "Raleway": "font-family: 'Raleway'",
-    "Roboto": "font-family: 'Roboto'",
-    "Lobster": "font-family: 'Lobster'",
-    "Merriweather": "font-family: 'Merriweather'",
-    "Playfair Display": "font-family: 'Playfair Display'"
+    "Open Sans": "OpenSans-Regular.ttf",
+    "Raleway": "Raleway-Regular.ttf",
+    "Roboto": "Roboto-Regular.ttf",
+    "Lobster": "Lobster-Regular.ttf",
+    "Merriweather": "Merriweather-Regular.ttf",
+    "Playfair Display": "PlayfairDisplay-Regular.ttf"
 }
-
-# Show font previews
-st.markdown("### 🔤 Font Previews")
-for font_name, css in font_options.items():
-    st.markdown(f'<p class="font-preview" style="{css}">{font_name}</p>', unsafe_allow_html=True)
 
 font_choice = st.selectbox("Choose a Font:", list(font_options.keys()))
 font_size = st.slider("🆙 Font Size:", 20, 80, 40)
 font_color = st.color_picker("🎨 Font Color:", "#000000")
 bg_mode = st.selectbox("🌙 Background Mode:", ["Light", "Dark"])
 
+# ---------------------------
+# Font Preview
+# ---------------------------
+font_preview_text = "The quick brown fox jumps over the lazy dog."  # Sample text for preview
 
-# Load font path
+# Function to load local fonts
 def load_local_font(font_name):
-    font_map = {
-        "Open Sans": "OpenSans-Regular.ttf",
-        "Raleway": "Raleway-Regular.ttf",
-        "Roboto": "Roboto-Regular.ttf",
-        "Lobster": "Lobster-Regular.ttf",
-        "Merriweather": "Merriweather-Regular.ttf",
-        "Playfair Display": "PlayfairDisplay-Regular.ttf",
-    }
-    font_file = font_map.get(font_name)
+    font_file = font_options.get(font_name)
     font_path = os.path.join("fonts", font_file) if font_file else None
     if font_path and os.path.exists(font_path):
         return font_path
@@ -91,8 +77,21 @@ def load_local_font(font_name):
         st.warning(f"⚠️ Font '{font_name}' not found.")
         return None
 
+# ---------------------------
+# Display Font Preview
+# ---------------------------
+font_path = load_local_font(font_choice)
+if font_path:
+    font_preview = ImageFont.truetype(font_path, 30)  # Using a fixed size for preview text
+    img_preview = Image.new("RGB", (600, 100), color=(255, 255, 255))  # White background
+    draw = ImageDraw.Draw(img_preview)
+    draw.text((10, 20), font_preview_text, font=font_preview, fill=(0, 0, 0))  # Black text color
 
-# Generate the image
+    st.image(img_preview, caption=f"Preview of '{font_choice}'", use_container_width=True)
+
+# ---------------------------
+# Generate Quote Image
+# ---------------------------
 def generate_quote_image(quote, author, font_name, font_size, color, bg_mode):
     width, height = 1080, 1080
     bg_color = (255, 255, 255) if bg_mode == "Light" else (0, 0, 0)
@@ -103,7 +102,6 @@ def generate_quote_image(quote, author, font_name, font_size, color, bg_mode):
 
     font_path = load_local_font(font_name)
     if not font_path:
-        st.error(f"💥 Font '{font_name}' could not be loaded.")
         return None
 
     font = ImageFont.truetype(font_path, font_size)
@@ -142,13 +140,17 @@ def generate_quote_image(quote, author, font_name, font_size, color, bg_mode):
 
     return img
 
-
-# Button to generate image
+# ---------------------------
+# Generate Button
+# ---------------------------
 if st.button("🚀 Generate Quote Image"):
     with st.spinner("Creating your masterpiece..."):
         img = generate_quote_image(quote, author, font_choice, font_size, font_color, bg_mode)
         if img:
-            st.image(img, caption="✨ Here's your quote image!", use_column_width=True)
+            st.image(img, caption="✨ Here's your quote image!", use_container_width=True)
+
             buf = io.BytesIO()
             img.save(buf, format="PNG")
             st.download_button("💾 Download Image", buf.getvalue(), file_name="quote.png", mime="image/png")
+        else:
+            st.error("❌ Failed to generate image. Please check your font selection.")
