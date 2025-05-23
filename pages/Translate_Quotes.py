@@ -1,98 +1,111 @@
 import streamlit as st
-from transformers import MarianMTModel, MarianTokenizer
+import requests
 import io
 from PIL import Image, ImageDraw, ImageFont
 
-# -------------------- Translation Setup --------------------
-@st.cache_resource
-def load_translation_model(lang_code):
-    model_name = f"Helsinki-NLP/opus-mt-en-{lang_code}"
-    tokenizer = MarianTokenizer.from_pretrained(model_name)
-    model = MarianMTModel.from_pretrained(model_name)
-    return tokenizer, model
+# -------------------- API Config --------------------
+RAPIDAPI_URL = "https://openl-translate.p.rapidapi.com/translate/bulk"
+RAPIDAPI_HEADERS = {
+    "Content-Type": "application/json",
+    "x-rapidapi-host": "openl-translate.p.rapidapi.com",
+    "x-rapidapi-key": "b3e71c2f0amsh4cb4c3fd21fa538p1f4f12jsnee4b3520382c"
+}
 
-def translate(text, lang_code):
-    tokenizer, model = load_translation_model(lang_code)
-    inputs = tokenizer([text], return_tensors="pt", padding=True)
-    translated = model.generate(**inputs)
-    return tokenizer.decode(translated[0], skip_special_tokens=True)
+# -------------------- Translation Function --------------------
+def translate_text(text, target_lang):
+    payload = {
+        "target_lang": target_lang,
+        "text": [text]
+    }
+    response = requests.post(RAPIDAPI_URL, json=payload, headers=RAPIDAPI_HEADERS)
+    if response.status_code == 200:
+        data = response.json()
+        translated_list = data.get("translatedTexts", [])
+        if translated_list:
+            return translated_list[0]
+        else:
+            return "❌ Translation failed: No translated text found."
+    else:
+        return f"❌ API Error {response.status_code}: {response.text}"
 
 # -------------------- Image Generation --------------------
-def load_font(size):
+def get_font(font_size):
     try:
-        return ImageFont.truetype("DejaVuSans.ttf", size)
+        return ImageFont.truetype("DejaVuSans.ttf", font_size)
     except:
         return ImageFont.load_default()
 
-def create_image_with_text(text, font_size=40, text_color="#000000", bg_color="#ffffff"):
-    width, height = 1080, 1080
-    image = Image.new("RGB", (width, height), color=bg_color)
+def render_text_on_image(text, font_size, text_color, bg_color):
+    W, H = 1080, 1080
+    image = Image.new("RGB", (W, H), color=bg_color)
     draw = ImageDraw.Draw(image)
+    font = get_font(font_size)
 
-    font = load_font(font_size)
-    lines = []
-    line = ""
-    margin = 100
-    max_width = width - 2 * margin
-
+    margin = 80
+    max_width = W - 2 * margin
     words = text.split()
-    for word in words:
-        test_line = f"{line} {word}".strip()
-        if draw.textlength(test_line, font=font) <= max_width:
-            line = test_line
-        else:
-            lines.append(line)
-            line = word
-    if line:
-        lines.append(line)
+    lines, current = [], ""
 
-    line_height = font.getbbox("Ay")[3] - font.getbbox("Ay")[1]
-    total_height = len(lines) * (line_height + 10)
-    y = (height - total_height) // 2
+    for word in words:
+        trial = f"{current} {word}".strip()
+        if draw.textlength(trial, font=font) <= max_width:
+            current = trial
+        else:
+            lines.append(current)
+            current = word
+    lines.append(current)
+
+    line_height = font.getbbox("A")[3] + 10
+    total_text_height = len(lines) * line_height
+    y = (H - total_text_height) // 2
 
     for line in lines:
         line_width = draw.textlength(line, font=font)
-        draw.text(((width - line_width) / 2, y), line, font=font, fill=text_color)
-        y += line_height + 10
+        x = (W - line_width) // 2
+        draw.text((x, y), line, font=font, fill=text_color)
+        y += line_height
 
     return image
 
-# -------------------- Streamlit UI --------------------
-st.set_page_config(page_title="🌍 Quote Translator", layout="centered")
-st.title("🌍 Translate a Quote")
-st.markdown("Easily convert your favorite quotes into any language using AI magic ✨")
-
-quote = st.text_area("Enter your quote:", "The only limit to our realization of tomorrow is our doubts of today.")
-
-languages = {
-    "Hindi": "hi",
-    "French": "fr",
-    "Spanish": "es",
-    "German": "de",
-    "Japanese": "ja",
-    "Arabic": "ar",
-    "Russian": "ru",
-    "Chinese (Simplified)": "zh"
+# -------------------- Supported Languages --------------------
+language_options = {
+    "Afrikaans": "af", "Albanian": "sq", "Amharic": "am", "Ancient Greek": "grc",
+    "Azerbaijani": "az", "French": "fr", "German": "de", "Hindi": "hi",
+    "Spanish": "es", "Arabic": "ar", "Japanese": "ja", "Russian": "ru",
+    "Chinese (Simplified)": "zh-CN", "Yoda": "yoda", "Morse Code": "morse",
 }
 
-selected_lang = st.selectbox("Select a language to translate into:", list(languages.keys()))
+# -------------------- Streamlit UI --------------------
+st.set_page_config(page_title="Quote Translator", layout="centered")
+st.title("🌍 Quote Translator & Image Creator")
+st.markdown("Unleash your words in any language and style them up as art 🎨")
+
+user_quote = st.text_area("💬 Enter your quote:", value="The best way to predict the future is to invent it.")
+
+target_language = st.selectbox("🌐 Choose translation language:", list(language_options.keys()))
+
+# Initialize session state variables
+if "translated" not in st.session_state:
+    st.session_state.translated = ""
 
 if st.button("🔁 Translate"):
     with st.spinner("Translating..."):
-        translated = translate(quote, languages[selected_lang])
-        st.success("Here's your translated quote:")
-        st.text_area("Translated:", translated, height=150)
+        code = language_options[target_language]
+        st.session_state.translated = translate_text(user_quote, code)
+        st.success("🎉 Translation complete!")
 
-        st.markdown("---")
-        st.subheader("📤 Export as Image")
-        font_size = st.slider("Font Size", 20, 80, 40, key="font_size_translated")
-        font_color = st.color_picker("Font Color", "#000000", key="font_color_translated")
-        bg_color = st.color_picker("Background Color", "#ffffff", key="bg_color_translated")
+if st.session_state.translated:
+    st.markdown(f"> {st.session_state.translated}")
 
-        if st.button("🖼️ Generate Image"):
-            image = create_image_with_text(translated, font_size, font_color, bg_color)
-            st.image(image, caption="Translated Quote Image", use_container_width=True)
+    st.markdown("## 🎨 Customize Image")
+    font_size = st.slider("Font Size", 20, 100, 40)
+    text_color = st.color_picker("Text Color", "#000000")
+    bg_color = st.color_picker("Background Color", "#ffffff")
 
-            buf = io.BytesIO()
-            image.save(buf, format="PNG")
-            st.download_button("📥 Download Image", data=buf.getvalue(), file_name="translated_quote.png", mime="image/png")
+    if st.button("🖼️ Generate Image"):
+        img = render_text_on_image(st.session_state.translated, font_size, text_color, bg_color)
+        st.image(img, caption="Translated Quote Image", use_container_width=True)
+
+        buf = io.BytesIO()
+        img.save(buf, format="PNG")
+        st.download_button("📥 Download as PNG", buf.getvalue(), "quote_image.png", "image/png")
