@@ -98,7 +98,7 @@ if st.session_state.translated:
     st.markdown(f"> {st.session_state.translated}")
 
     st.markdown("## 🎨 Customize Image")
-    font_size = st.slider("Font Size", 20, 100, 40)
+    font_size = st.slider("Font Size", 20, 80, 40)
     text_color = st.color_picker("Text Color", "#000000")
     bg_color = st.color_picker("Background Color", "#ffffff")
 
