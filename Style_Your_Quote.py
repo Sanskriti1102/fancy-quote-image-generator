@@ -39,6 +39,14 @@ st.markdown("""
 st.image("pages/images/itlogo.png", width=150)
 st.title("Style Your Quote Image")
 st.markdown("Create stylish quote images with custom fonts, colors, and themes!")
+col1, col2 = st.columns([1, 6])
+with col1:
+    st.image("pages/images/ski.png", width=100)
+with col2:
+    st.markdown(
+        "<span style='font-size: 0.9rem;'>Coded by <strong>Sanskriti Kadam</strong><br>Founder & Director at IntelligenZ Talks</br></span>",
+        unsafe_allow_html=True
+    )
 
 # ---------------------------
 # Quote Input

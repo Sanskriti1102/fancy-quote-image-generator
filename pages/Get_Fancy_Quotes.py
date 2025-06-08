@@ -107,7 +107,14 @@ st.set_page_config(page_title="🖼️ Get Fancy Quote Images", layout="centered
 st.image("pages/images/itlogo.png", width=150)
 st.title("Get Fancy Quote Images")
 st.markdown("Create stylish quote images with custom fonts, colors, and themes and MORE")
-
+col1, col2 = st.columns([1, 6])
+with col1:
+    st.image("pages/images/ski.png", width=100)
+with col2:
+    st.markdown(
+        "<span style='font-size: 0.9rem;'>Coded by <strong>Sanskriti Kadam</strong><br>Founder & Director at IntelligenZ Talks</br></span>",
+        unsafe_allow_html=True
+    )
 # Scraping and Word Cloud
 st.subheader("🔍 Explore Quotes by Keyword")
 quotes = scrape_quotes()

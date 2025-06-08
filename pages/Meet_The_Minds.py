@@ -4,7 +4,14 @@ st.set_page_config(page_title="About | IntelligenZ Talks", layout="centered")
 
 # --- Logo Banner at the Top ---
 st.image("pages/images/it.jpg")
-
+col1, col2 = st.columns([1, 6])
+with col1:
+    st.image("pages/images/ski.png", width=100)
+with col2:
+    st.markdown(
+        "<span style='font-size: 0.9rem;'>Coded by <strong>Sanskriti Kadam</strong><br>Founder & Director at IntelligenZ Talks</br></span>",
+        unsafe_allow_html=True
+    )
 
 st.subheader("Welcome to IntelligenZ Talks – Where Tech meets Innovation🎙️")
 st.markdown("""
@@ -27,7 +34,7 @@ with col1:
     st.image("pages/images/sk.png", caption="Sanskriti Kadam", width=250)
     st.markdown("""
 **Sanskriti Kadam**  
-  Founder | Social Entrepreneur  
+  Founder & Director @IntelligenZ Talks| Social Entrepreneur  
 🔗 [Topmate](https://topmate.io/sanskriti_kadam)
 
 <div style="display: flex; gap: 10px; align-items: center; margin-top: 5px;">
@@ -42,7 +49,7 @@ with col2:
     st.image("pages/images/ks.png", caption="Krishi Shah", width=250)
     st.markdown("""
 **Krishi Shah**  
-  Co-Founder | Podcaster  
+  Co-Founder @IntelligenZ Talks| Podcaster  
 
 <div style="display: flex; gap: 10px; align-items: center; margin-top: 5px;">
     <a href="https://www.linkedin.com/in/krishishah1211/" target="_blank">

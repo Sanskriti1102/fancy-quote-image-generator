@@ -3,7 +3,14 @@ import streamlit as st
 st.set_page_config(page_title="QG v1.0 Documentation")
 st.image("pages/images/itlogo.png", width=150)
 st.title("QG v1.0 Documentation")
-
+col1, col2 = st.columns([1, 6])
+with col1:
+    st.image("pages/images/ski.png", width=100)
+with col2:
+    st.markdown(
+        "<span style='font-size: 0.9rem;'>Coded by <strong>Sanskriti Kadam</strong><br>Founder & Director at IntelligenZ Talks</br></span>",
+        unsafe_allow_html=True
+    )
 st.markdown("""
 Welcome to **Quote Generator (QG) v1.0** – your go-to tool for crafting impactful, aesthetic quote images with minimal effort and maximum style ✨
 
