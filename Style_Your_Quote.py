@@ -42,8 +42,8 @@ st.markdown("Create stylish quote images with custom fonts, colors, and themes!"
 # ---------------------------
 # Quote Input
 # ---------------------------
-quote = st.text_area("💬 Enter your quote:", "The best way to get started is to quit talking and begin doing.")
-author = st.text_input("🖊️ Author name:", "Walt Disney")
+quote = st.text_area("💬 Enter your quote:", "write your quote here...")
+author = st.text_input("🖊️ Author name:", "write author's name here...")
 
 # ---------------------------
 # Font Options (Dropdown Only)
