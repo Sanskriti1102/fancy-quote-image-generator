@@ -1,6 +1,9 @@
 import streamlit as st
 
-st.set_page_config(page_title="About | IntelligenZ Talks")
+st.set_page_config(page_title="About | IntelligenZ Talks", layout="centered")
+
+# --- Logo Banner at the Top ---
+st.image("pages/images/it.jpg", use_column_width=True)
 
 st.title("🎙️ About IntelligenZ Talks")
 
@@ -10,25 +13,32 @@ Welcome to **IntelligenZ Talks** – Where Tech Meets Innovation 🎙️
 Our mission is to empower the next generation of tech leaders by blending education with inspiration. We're a passionate team of developers, creators, and tech enthusiasts bringing the world closer to cutting-edge technology.
 
 ---
+""")
 
-### 🎧 About IntelligenZ Talks
-Our popular **Tech Talks Podcast Series** features:
-- Conversations with **industry leaders** in AI, ML, Cybersecurity, and Cloud Computing.
-- Inspiring stories from **engineering students and tech professionals**.
-- Real-world insights and career guidance.
+st.subheader("👥 Meet the Great Minds")
 
-IntelligenZ Talks isn’t just about staying updated — it's about building a **community**.
+# --- Team Section with Images ---
+col1, col2 = st.columns(2)
 
-👉 Your likes, shares, and comments fuel our journey.
+with col1:
+    st.image("pages/images/sk.png", caption="Sanskriti Kadam", width=250)
+    st.markdown("""
+    **Sanskriti Kadam**  
+    💼 Founder | Social Entrepreneur 
+    🔗 [LinkedIn](https://www.linkedin.com/in/sanskritikadam/)  
+    🔗 [Topmate](https://topmate.io/sanskriti_kadam)
+    """)
 
----
+with col2:
+    st.image("pages/images/ks.png", caption="Krishi Shah", width=250)
+    st.markdown("""
+    **Krishi Shah**  
+    🎨 Co-Founder | Podcaster  
+    🔗 [LinkedIn](https://www.linkedin.com/in/krishishah1211/)
+    """)
 
-### 👥 IntelligenZ Crew Behind This Project
-- 👩‍💻 [Sanskriti Kadam](https://www.linkedin.com/in/sanskritikadam/)
-- 👩‍💻 [Krishi Shah](https://www.linkedin.com/in/krishishah1211/)
-
-🔗 For mentorship, collaborations, or services: [Topmate Profile](https://topmate.io/sanskriti_kadam)
-
+# --- Community Links ---
+st.markdown("""
 ---
 
 ### 🌐 Join the Movement
@@ -48,9 +58,6 @@ Quote Generator is part of our open-source creative toolkit for tech enthusiasts
 
 **Disclaimer**: This tool is for personal and educational use. Please **do not copy or redistribute** without proper credit.
 
-
 - Created by: **Team IntelligenZ Talks**  
-- Copyright © 2025
-
-We built this with ❤️, creativity, and coffee. Lots of coffee.
+- Built with ❤️, creativity, and way too much coffee ☕
 """)
