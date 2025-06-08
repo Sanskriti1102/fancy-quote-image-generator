@@ -35,8 +35,9 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
-
-st.title("🖼️ Style Your Quote Image")
+# --- Logo Banner at the Top ---
+st.image("pages/images/itlogo.png", width=150)
+st.title("Style Your Quote Image")
 st.markdown("Create stylish quote images with custom fonts, colors, and themes!")
 
 # ---------------------------

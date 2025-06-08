@@ -1,8 +1,8 @@
 import streamlit as st
 
 st.set_page_config(page_title="QG v1.0 Documentation")
-
-st.title("📘 QG v1.0 Documentation")
+st.image("pages/images/itlogo.png", width=150)
+st.title("QG v1.0 Documentation")
 
 st.markdown("""
 Welcome to **Quote Generator (QG) v1.0** – your go-to tool for crafting impactful, aesthetic quote images with minimal effort and maximum style ✨
