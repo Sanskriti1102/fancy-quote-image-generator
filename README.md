@@ -1,5 +1,11 @@
 # 🌟 Fancy Quote Image Generator
 
+---
+## 🚨 Detailed Video of Explaination Only on Youtube: [Watch Now]()
+![image](https://github.com/user-attachments/assets/0c5987ff-7d14-4978-832c-997ff300d497)
+
+---
+
 > ✨ Built by **Sanskriti Kadam** — Founder of [IntelligenZ Talks](https://www.youtube.com/@IntelligenZTalks)
 
 [![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python&logoColor=white)](https://www.python.org/)
